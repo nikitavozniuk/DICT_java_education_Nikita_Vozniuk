@@ -5,24 +5,52 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Hangman {
-    public static void main(String[] args) {
-        final String[] words = {"python", "java", "javascript", "kotlin"};
+    static int attempts = 8;
+    static String wordToGuess = "";
+    static String wordInput = "";
+
+    public static void startGame() {
+        final String[] words = { "python", "java", "javascript", "kotlin" };
         Random random = new Random();
         int index = random.nextInt(words.length);
-        String wordToGuess = words[index];
-        String hint = wordToGuess.replaceAll(wordToGuess.substring(2), "-".repeat(wordToGuess.length() - 2));
-        String guessTheWordText = String.format("Guess the word %s: ", hint);
-
+        wordToGuess = words[index];
         System.out.println("HANGMAN");
-        System.out.print(guessTheWordText);
+    }
 
-        Scanner in = new Scanner(System.in);
-        String name = in.nextLine();
+    public static void core() {
+        int attemptsUsed = 0;
+        wordInput = wordToGuess.replaceAll("(?s).", "-");
 
-        if (Objects.equals(name, wordToGuess)) {
-            System.out.println("You survived!");
-        } else {
-            System.out.println("You lost!");
+        while (attemptsUsed != attempts & !Objects.equals(wordInput, wordToGuess)) {
+            System.out.println(wordInput);
+            System.out.print("Input a letter: > ");
+            Scanner in = new Scanner(System.in);
+            String input = in.nextLine();
+
+            if (wordToGuess.contains(input)) {
+                renderWord(wordInput, input);
+            } else {
+                System.out.println("That letter doesn't appear in the word");
+            }
+            attemptsUsed++;
         }
+
+        System.out.println("\nThanks for playing!");
+        System.out.println("We'll see how well you did in the next stage");
+    }
+
+    public static void renderWord(String word, String c) {
+        for (int index = wordToGuess.indexOf(c);
+             index >= 0;
+             index = wordToGuess.indexOf(c, index + 1))
+        {
+            word = word.substring(0, index) + c + word.substring(index + 1);
+        }
+        wordInput = word;
+    }
+
+    public static void main(String[] args) {
+        startGame();
+        core();
     }
 }
