@@ -16,5 +16,22 @@ public class ChatBot {
         String output = String.format("What a great name you have, %s!", name);
 
         System.out.println(output);
+
+        System.out.println("Let me guess your age.");
+        System.out.println("Enter remainders of dividing your age by 3, 5 and 7.");
+
+        String remainder3 = bufferedReader.readLine();
+        String remainder5 = bufferedReader.readLine();
+        String remainder7 = bufferedReader.readLine();
+
+        int parsedRemainder3 = Integer.parseInt(remainder3);
+        int parsedRemainder5 = Integer.parseInt(remainder5);
+        int parsedRemainder7 = Integer.parseInt(remainder7);
+
+        int age = (parsedRemainder3 * 70 + parsedRemainder5 * 21 + parsedRemainder7 * 15) % 105;
+
+        String ageOutput = String.format("Your age is %d; that's a good time to start programming!", age);
+
+        System.out.println(ageOutput);
     }
 }
