@@ -33,5 +33,17 @@ public class ChatBot {
         String ageOutput = String.format("Your age is %d; that's a good time to start programming!", age);
 
         System.out.println(ageOutput);
+
+        System.out.println("Now I will prove to you that I can count to any number you want.");
+
+        String countNumber = bufferedReader.readLine();
+        int parsedCountNumber = Integer.parseInt(countNumber);
+        int counter = 0;
+
+        for (int i = 0; i < parsedCountNumber + 1; i++) {
+            String counterOutput = String.format("%d !", counter);
+            System.out.println(counterOutput);
+            counter++;
+        }
     }
 }
