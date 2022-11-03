@@ -3,6 +3,34 @@ package ChatBot;
 import java.io.*;
 
 public class ChatBot {
+    public static void test() throws IOException {
+        InputStream inputStream = System.in;
+        Reader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+        System.out.println("Let's test your programming knowledge.");
+        System.out.println("Why do we use methods?");
+
+        System.out.println("1. To repeat a statement multiple lines.");
+        System.out.println("2. To decompose a program into several small subroutines.");
+        System.out.println("3. To determine the execution time of a program.");
+        System.out.println("4. To interrupt the execution of a program.");
+
+        while (true) {
+            String answer = bufferedReader.readLine();
+            int parsedAnswer = Integer.parseInt(answer);
+
+            if (parsedAnswer != 2) {
+                System.out.println("Please, try again.");
+                continue;
+            } else {
+                System.out.println("Great, you're right!");
+                break;
+            }
+        }
+        System.out.println("Goodbye, have a nice day!");
+    }
+
     public static void main(String[] args) throws IOException {
         InputStream inputStream = System.in;
         Reader inputStreamReader = new InputStreamReader(inputStream);
@@ -45,5 +73,7 @@ public class ChatBot {
             System.out.println(counterOutput);
             counter++;
         }
+
+        test();
     }
 }
