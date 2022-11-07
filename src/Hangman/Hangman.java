@@ -1,11 +1,12 @@
 package Hangman;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Hangman {
-    static int attempts = 8;
+    static int attempts = 0;
     static String wordToGuess = "";
     static String wordInput = "";
 
@@ -18,21 +19,26 @@ public class Hangman {
     }
 
     public static void core() {
-        int attemptsUsed = 0;
+        int attemptsPossible = 8;
+        ArrayList<String> chars = new ArrayList<String>();
         wordInput = wordToGuess.replaceAll("(?s).", "-");
 
-        while (attemptsUsed != attempts & !Objects.equals(wordInput, wordToGuess)) {
+        while (attemptsPossible >= attempts & !Objects.equals(wordInput, wordToGuess)) {
             System.out.println(wordInput);
             System.out.print("Input a letter: > ");
             Scanner in = new Scanner(System.in);
             String input = in.nextLine();
 
-            if (wordToGuess.contains(input)) {
+            if (wordToGuess.contains(input) && !chars.contains(input)) {
                 renderWord(wordInput, input);
+                chars.add(input);
+            } else if (chars.contains(input)) {
+                System.out.println("No improvements");
+                attemptsPossible--;
             } else {
                 System.out.println("That letter doesn't appear in the word");
+                attemptsPossible--;
             }
-            attemptsUsed++;
         }
 
         System.out.println("\nThanks for playing!");
