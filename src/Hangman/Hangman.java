@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 public class Hangman {
     static int attempts = 0;
+    static int attemptsPossible = 8;
+    static ArrayList<String> chars = new ArrayList<String>();
     static String wordToGuess = "";
     static String wordInput = "";
 
@@ -19,8 +21,6 @@ public class Hangman {
     }
 
     public static void core() {
-        int attemptsPossible = 8;
-        ArrayList<String> chars = new ArrayList<String>();
         wordInput = wordToGuess.replaceAll("(?s).", "-");
 
         while (attemptsPossible >= attempts & !Objects.equals(wordInput, wordToGuess)) {
@@ -29,16 +29,7 @@ public class Hangman {
             Scanner in = new Scanner(System.in);
             String input = in.nextLine();
 
-            if (wordToGuess.contains(input) && !chars.contains(input)) {
-                renderWord(wordInput, input);
-                chars.add(input);
-            } else if (chars.contains(input)) {
-                System.out.println("No improvements");
-                attemptsPossible--;
-            } else {
-                System.out.println("That letter doesn't appear in the word");
-                attemptsPossible--;
-            }
+            checkInput(input);
         }
 
         System.out.println("\nThanks for playing!");
@@ -53,6 +44,28 @@ public class Hangman {
             word = word.substring(0, index) + c + word.substring(index + 1);
         }
         wordInput = word;
+    }
+
+    public static void checkInput(String input) {
+        if (input.length() > 1) {
+            System.out.println("You should input a single letter.");
+            return;
+        }
+        if (!input.matches("[a-zA-Z]+")) {
+            System.out.println("Please enter a lowercase English letter.");
+            return;
+        }
+
+        if (wordToGuess.contains(input) && !chars.contains(input)) {
+            renderWord(wordInput, input);
+            chars.add(input);
+        } else if (chars.contains(input)) {
+            System.out.println("You've already guessed this letter.");
+            attemptsPossible--;
+        } else {
+            System.out.println("That letter doesn't appear in the word.");
+            attemptsPossible--;
+        }
     }
 
     public static void main(String[] args) {
