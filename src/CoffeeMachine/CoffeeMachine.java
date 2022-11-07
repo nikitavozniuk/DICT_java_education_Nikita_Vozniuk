@@ -18,20 +18,21 @@ class InitialState {
     }
 }
 
-public class CoffeeMachine {
-    private static String machineState = "remaining";
+class CoffeeMachineEngine {
+    public static String machineState = "remaining";
 
-    private static void actionHandler(String type) {
-        machineState = type;
-        if (Objects.equals(type, "buy")) {
+    public static void runMachine(String action) {
+        machineState = action;
+
+        if (Objects.equals(action, "buy")) {
             buyAction();
-        } else if (Objects.equals(type, "fill")) {
+        } else if (Objects.equals(action, "fill")) {
             fillAction();
-        } else if (Objects.equals(type, "take")) {
+        } else if (Objects.equals(action, "take")) {
             takeAction();
-        } else if (Objects.equals(type, "remaining")) {
+        } else if (Objects.equals(action, "remaining")) {
             printInfo();
-        } else if (Objects.equals(type, "exit")) {
+        } else if (Objects.equals(action, "exit")) {
             return;
         }
     }
@@ -154,19 +155,15 @@ public class CoffeeMachine {
             }
         }
     }
+}
 
-    private static void engine() {
+public class CoffeeMachine {
+    public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-
-        while (!Objects.equals(machineState, "exit")) {
+        while (!Objects.equals(CoffeeMachineEngine.machineState, "exit")) {
             System.out.println("Write action (buy, fill, take, remaining, exit): ");
             String type = in.nextLine();
-            actionHandler(type);
+            CoffeeMachineEngine.runMachine(type);
         }
-
-    }
-
-    public static void main(String[] args) {
-        engine();
     }
 }
