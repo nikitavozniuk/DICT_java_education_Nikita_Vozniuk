@@ -19,46 +19,34 @@ class InitialState {
 }
 
 public class CoffeeMachine {
+    private static String machineState = "remaining";
+
     private static void actionHandler(String type) {
+        machineState = type;
         if (Objects.equals(type, "buy")) {
             buyAction();
         } else if (Objects.equals(type, "fill")) {
             fillAction();
         } else if (Objects.equals(type, "take")) {
             takeAction();
+        } else if (Objects.equals(type, "remaining")) {
+            printInfo();
+        } else if (Objects.equals(type, "exit")) {
+            return;
         }
     }
 
     private static void buyAction() {
         Scanner in = new Scanner(System.in);
-        System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
+        System.out.println("\nWhat do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu: ");
         String option = in.nextLine();
-        int parsedOption = Integer.parseInt(option);
-
-        if (parsedOption == 1) {
-            InitialState.waterAmount = InitialState.waterAmount - 250;
-            InitialState.beansAmount = InitialState.beansAmount - 16;
-            InitialState.cupsAmount = InitialState.cupsAmount - 1;
-            InitialState.moneyAmount = InitialState.moneyAmount + 4;
-        } else if (parsedOption == 2) {
-            InitialState.waterAmount = InitialState.waterAmount - 350;
-            InitialState.milkAmount = InitialState.milkAmount - 75;
-            InitialState.beansAmount = InitialState.beansAmount - 20;
-            InitialState.cupsAmount = InitialState.cupsAmount - 1;
-            InitialState.moneyAmount = InitialState.moneyAmount + 7;
-        } else if (parsedOption == 3) {
-            InitialState.waterAmount = InitialState.waterAmount - 200;
-            InitialState.milkAmount = InitialState.milkAmount - 100;
-            InitialState.beansAmount = InitialState.beansAmount - 12;
-            InitialState.cupsAmount = InitialState.cupsAmount - 1;
-            InitialState.moneyAmount = InitialState.moneyAmount + 6;
-        }
+        checkBuyPossible(option);
     }
 
     private static void fillAction() {
         Scanner in = new Scanner(System.in);
 
-        System.out.println("Write how many ml of water you want to add: ");
+        System.out.println("\nWrite how many ml of water you want to add: ");
         String water = in.nextLine();
         int parsedWater = Integer.parseInt(water);
 
@@ -97,17 +85,85 @@ public class CoffeeMachine {
                 InitialState.cupsAmount,
                 InitialState.moneyAmount
         );
-        System.out.println("The coffee machine has: ");
+        System.out.println("\nThe coffee machine has: ");
         System.out.println(info);
+    }
+
+    private static void checkBuyPossible(String option) {
+        if (Objects.equals(option, "1")) {
+            int water = InitialState.waterAmount - 250;
+            int beans = InitialState.beansAmount - 16;
+            int cups = InitialState.cupsAmount - 1;
+
+            if (water >= 0 && beans >= 0 && cups >= 0) {
+                InitialState.waterAmount = water;
+                InitialState.beansAmount = beans;
+                InitialState.cupsAmount = cups;
+                InitialState.moneyAmount = InitialState.moneyAmount + 4;
+                System.out.println("I have enough resources, making you a coffee!\n");
+            } else if (water < 0) {
+                System.out.println("Sorry, not enough water!\n");
+            } else if (beans < 0) {
+                System.out.println("Sorry, not enough beans!\n");
+            } else if (cups < 0) {
+                System.out.println("Sorry, not enough cups!\n");
+            }
+        } else if (Objects.equals(option, "2")) {
+            int water = InitialState.waterAmount - 350;
+            int milk = InitialState.milkAmount - 75;
+            int beans = InitialState.beansAmount - 20;
+            int cups = InitialState.cupsAmount - 1;
+
+            if (water >= 0 && beans >= 0 && cups >= 0 && milk >= 0) {
+                InitialState.waterAmount = water;
+                InitialState.milkAmount = milk;
+                InitialState.beansAmount = beans;
+                InitialState.cupsAmount = cups;
+                InitialState.moneyAmount = InitialState.moneyAmount + 7;
+                System.out.println("I have enough resources, making you a coffee!\n");
+            } else if (water < 0) {
+                System.out.println("Sorry, not enough water!\n");
+            } else if (beans < 0) {
+                System.out.println("Sorry, not enough beans!\n");
+            } else if (cups < 0) {
+                System.out.println("Sorry, not enough cups!\n");
+            } else if (milk < 0) {
+                System.out.println("Sorry, not enough milk!\n");
+            }
+        } else if (Objects.equals(option, "3")) {
+            int water = InitialState.waterAmount - 200;
+            int milk = InitialState.milkAmount - 100;
+            int beans = InitialState.beansAmount - 12;
+            int cups = InitialState.cupsAmount - 1;
+
+            if (water >= 0 && beans >= 0 && cups >= 0 && milk >= 0) {
+                InitialState.waterAmount = InitialState.waterAmount - 200;
+                InitialState.milkAmount = InitialState.milkAmount - 100;
+                InitialState.beansAmount = InitialState.beansAmount - 12;
+                InitialState.cupsAmount = InitialState.cupsAmount - 1;
+                InitialState.moneyAmount = InitialState.moneyAmount + 6;
+                System.out.println("I have enough resources, making you a coffee!\n");
+            } else if (water < 0) {
+                System.out.println("Sorry, not enough water!\n");
+            } else if (beans < 0) {
+                System.out.println("Sorry, not enough beans!\n");
+            } else if (cups < 0) {
+                System.out.println("Sorry, not enough cups!\n");
+            } else if (milk < 0) {
+                System.out.println("Sorry, not enough milk!\n");
+            }
+        }
     }
 
     private static void engine() {
         Scanner in = new Scanner(System.in);
-        printInfo();
-        System.out.println("Write action (buy, fill, take): ");
-        String type = in.nextLine();
-        actionHandler(type);
-        printInfo();
+
+        while (!Objects.equals(machineState, "exit")) {
+            System.out.println("Write action (buy, fill, take, remaining, exit): ");
+            String type = in.nextLine();
+            actionHandler(type);
+        }
+
     }
 
     public static void main(String[] args) {
