@@ -1,41 +1,57 @@
 package CoffeeMachine;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class CoffeeMachine {
-    private static final String START_STAGE = "Starting to make a coffee";
-    private static final String GRINDING_BEANS_STAGE = "Grinding coffee beans";
-    private static final String BOILING_WATER_STAGE = "Boiling water";
-    private static final String MIXING_STAGE = "Mixing boiled water with crushed coffee beans";
-    private static final String POURING_COFFEE_STAGE = "Pouring coffee into the cup";
-    private static final String POURING_MILK_STAGE = "Pouring some milk into the cup";
-    private static final String READY_STAGE = "Coffee is ready!";
-
     private static final int DEFAULT_WATER_FOR_CUP = 200;
     private static final int DEFAULT_MILK_FOR_CUP = 50;
     private static final int DEFAULT_BEANS_FOR_CUP = 15;
 
-    private static void result(int cups) {
-        int waterCount = DEFAULT_WATER_FOR_CUP * cups;
-        int milkCount = DEFAULT_MILK_FOR_CUP * cups;
-        int beansCount = DEFAULT_BEANS_FOR_CUP * cups;
+    private static void start() {
+        Scanner in = new Scanner(System.in);
 
-        String output = String.format(
-                "For %d cups of coffee you will need: \n%d ml of water\n%d ml of milk\n%d g of coffee beans",
-                cups,
-                waterCount,
-                milkCount,
-                beansCount
-        );
-        System.out.println(output);
+        System.out.println("Write how many ml of water the coffee machine has: ");
+        String waterCount = in.nextLine();
+        int parsedWaterCount = Integer.parseInt(waterCount);
+
+        System.out.println("Write how many ml of milk the coffee machine has: ");
+        String milkCount = in.nextLine();
+        int parsedMilkCount = Integer.parseInt(milkCount);
+
+        System.out.println("Write how many grams of coffee beans the coffee machine has: ");
+        String beansCount = in.nextLine();
+        int parsedBeansCount = Integer.parseInt(beansCount);
+
+        System.out.println("Write how many cups of coffee you will need: ");
+        String cupsCount = in.nextLine();
+        int parsedCupsCount = Integer.parseInt(cupsCount);
+
+        calc(parsedWaterCount, parsedMilkCount, parsedBeansCount, parsedCupsCount);
+    }
+
+    private static void calc(int water, int milk, int beans, int cups) {
+        ArrayList<Integer> data = new ArrayList<Integer>();
+        data.add(water / DEFAULT_WATER_FOR_CUP);
+        data.add(milk / DEFAULT_MILK_FOR_CUP);
+        data.add(beans / DEFAULT_BEANS_FOR_CUP);
+
+        data.sort(Comparator.comparing(integer -> integer));
+        int amountPossible = data.get(0);
+
+        if (amountPossible == cups) {
+            System.out.println("Yes, I can make that amount of coffee");
+        } else if (amountPossible > cups) {
+            String output = String.format("Yes, I can make that amount of coffee (and even %d more than that)", amountPossible - cups);
+            System.out.println(output);
+        } else {
+            String output = String.format("No, I can make only %d cups of coffee", amountPossible);
+            System.out.println(output);
+        }
     }
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-
-        System.out.println("Write how many cups of coffee you will need: ");
-        String cups = in.nextLine();
-        int parsedCups = Integer.parseInt(cups);
-        result(parsedCups);
+        start();
     }
 }
